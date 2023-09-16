@@ -1,5 +1,15 @@
 <div class="row my-5">
     <div class="col">
+        <div class="row mb-2 justify-content-end">
+            <form name="frm" class="col-6 col-md-4 col-lg-3">
+                <div class="input-group">
+                    <input name ="query" class="form-control" value="자바">
+                    <button class="btn btn-primary">검색</button>
+                </div>
+
+            </form>
+
+        </div>
         <!--검색결과 출력-->
         <div id="div_books" class="row"></div>
     </div>
@@ -23,13 +33,20 @@
 </script>
 
 <script>
+    let query=$(frm.query).val();
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        query=$(frm.query).val();
+        getBooks();
+    })
+
     getBooks();
     function getBooks(){
         $.ajax({
             type:"get",
             url:"https://dapi.kakao.com/v3/search/book",
             headers:{ Authorization: `KakaoAK 29e82fbcca120b0de0f8be1f9ce91a29` },
-            data:{query:"Node.js", page:1, size:6},
+            data:{query:query, page:1, size:6},
             success:function(result){
                 console.log(result);
                 let temp=Handlebars.compile($("#temp_books").html());
