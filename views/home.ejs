@@ -1,5 +1,40 @@
 <div class="row my-5">
     <div class="col">
-        <h1 class="text-center">박태수......</h1>
+        <!--검색결과 출력-->
+        <div id="div_books" class="row"></div>
     </div>
 </div>
+<!--도서정보 출력 템플릿-->
+<script type="x-handlebars-template" id="temp_books">
+   
+    {{#each documents}}
+        <div class="col-2">
+            <div class="card">
+                <div class="card-body">
+                    <img src="{{thumbnail}}">
+                    <div>{{title}}</div>
+                </div>
+                <div class="card-foot">
+                    {{price}}
+                </div>
+            </div>    
+        </div>
+    {{/each}}
+</script>
+
+<script>
+    getBooks();
+    function getBooks(){
+        $.ajax({
+            type:"get",
+            url:"https://dapi.kakao.com/v3/search/book",
+            headers:{ Authorization: `KakaoAK 29e82fbcca120b0de0f8be1f9ce91a29` },
+            data:{query:"Node.js", page:1, size:6},
+            success:function(result){
+                console.log(result);
+                let temp=Handlebars.compile($("#temp_books").html());
+                $("#div_books").html(temp(result));
+            }
+        })
+    }
+</script>
